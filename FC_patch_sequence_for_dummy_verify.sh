@@ -33,6 +33,7 @@ else
     echo "          aa.bb.cc.dd is the new FC 0306 module version number"
     echo ""
     echo "  exemple : ./FC_patch_sequence_for_dummy_verify.sh Spark 03.02.43.21"
+    echo "  exemple : ./FC_patch_sequence_for_dummy_verify.sh Mavic_01030700 03.02.30.14"
     echo "  exemple : ./FC_patch_sequence_for_dummy_verify.sh Mavic 03.02.44.08"
     echo "  exemple : ./FC_patch_sequence_for_dummy_verify.sh P4P 03.02.44.08"
     echo "  exemple : ./FC_patch_sequence_for_dummy_verify.sh P4std 03.02.44.08"
@@ -44,8 +45,20 @@ else
 fi
 
 MODULE=0306
+PATCH_VERSION=""
 
-if [ "$1" == "Mavic" ]
+if [ "$1" == "Mavic_01030700" ]
+then
+    #   Mavic Pro v01.03.0700
+    PATCH_VERSION="_01030700"
+    AC_PREFIX=wm220
+    FULL_ORIGINAL_FIRMWARE_VERSION="v01.03.0700"
+    ORI_VERSION="03.02.30.13"
+    ORI_FILEDATE=20170405
+    ORI_MODULE_TIMESTAMP="2017-04-05 15:05:14"
+    #escape the / from <\module> after copy/pasting the original data here
+    ORI_MODULE_INFO='<module id="0306" version="03.02.30.13" type="" group="ac" size="1537056" md5="61df5e5a394c00cc50e04044597ba22d">wm220_0306_v03.02.30.13_20170405.pro.fw.sig<\/module>'
+elif [ "$1" == "Mavic" ]
 then
     #   Mavic Pro 
     AC_PREFIX=wm220
@@ -148,7 +161,7 @@ echo "               Adding U-Blox custom configuration"
 echo "################################################################################"
 
 # call it using python version 2
-python2 "$PATH_TO_TOOLS"/DJI_FC_Patcher/patch_"$AC_PREFIX"_"$MODULE".py $TMP_FILENAME1 $VERSION
+python2 "$PATH_TO_TOOLS"/DJI_FC_Patcher/patch_"$AC_PREFIX"_"$MODULE""$PATCH_VERSION".py $TMP_FILENAME1 $VERSION
 if [ $? != 0 ]
 then
     echo "#### Issue while patching module ####"
